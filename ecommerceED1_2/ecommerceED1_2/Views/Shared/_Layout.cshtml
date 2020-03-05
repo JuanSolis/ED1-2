@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ecommerceED1_2.Utils;
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -22,7 +23,7 @@
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="@Url.Action("Pedidos", "Home")">Pedidos <i class="fas fa-shopping-cart"></i><span class="badge badge-danger"></span></a>
+                    <a class="nav-link" href="@Url.Action("Pedidos", "Home")">Pedidos <i class="fas fa-shopping-cart"></i><span class="badge badge-danger">@Storage.Instance.pedidosFarmacos.Count</span></a>
                 </li>
             </ul>
         </div>

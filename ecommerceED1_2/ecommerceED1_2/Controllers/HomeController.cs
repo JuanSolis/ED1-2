@@ -81,6 +81,22 @@ namespace ecommerceED1_2.Controllers
             return View(Storage.Instance.listaFarmacos);
         }
 
+        [HttpGet]
+        public ActionResult EditFarmacos(string id)
+        {
+            int _id = int.Parse(id);
+            return View(Storage.Instance.listaFarmacos[(_id - 1)]);
+        }
+
+        [HttpPost]
+        public ActionResult EditFarmacos(string id, FormCollection collection)
+        {
+            int _id = int.Parse(id);
+            int nuevaExistencia = int.Parse(collection["CantidadFarmaco"]);
+            Storage.Instance.listaFarmacos[(_id - 1)].existencia = nuevaExistencia;
+            return RedirectToAction("Farmacos");
+        }
+
         public ActionResult Pedidos()
         {
             return View(Storage.Instance.pedidosFarmacos);

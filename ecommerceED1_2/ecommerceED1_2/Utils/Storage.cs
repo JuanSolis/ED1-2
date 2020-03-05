@@ -21,7 +21,8 @@ namespace ecommerceED1_2.Utils
         }
 
         public List<Farmacos> listaFarmacos = new List<Farmacos>();
-
+        public List<FarmacosPedidos> pedidosFarmacos = new List<FarmacosPedidos>();
+        public double totalACancelar = 0;
 
     }
 }

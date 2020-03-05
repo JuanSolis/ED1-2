@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using ecommerceED1_2.Models;
+using ecommerceED1_2.Utils;
 
 
 namespace ecommerceED1_2.Controllers
@@ -26,21 +28,58 @@ namespace ecommerceED1_2.Controllers
                 path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
                 file.SaveAs(path);
             }
-            return View();
+
+            reader myReader = new reader(Server.MapPath("~/App_Data/uploads/" + fileName));
+            ArbolBB arbolBinario = new ArbolBB();
+            Nodo<String, int> primerNodo = new Nodo<string, int>();
+            primerNodo.nomFarmaco = Storage.Instance.listaFarmacos[0].nombreFarmaco;
+            primerNodo.lineaArchivo = (Storage.Instance.listaFarmacos[0].id + 1);
+
+            Nodo<string, int> raiz = arbolBinario.InsertarNodo(primerNodo.lineaArchivo, primerNodo.nomFarmaco, null);
+
+            foreach (var farmacos in Storage.Instance.listaFarmacos)
+            {
+                arbolBinario.InsertarNodo(farmacos.id, farmacos.nombreFarmaco, raiz);
+
+            }
+            //Prueba para saber que el arbol esta bien
+            //arbolBinario.Tranversal(raiz);
+
+            return RedirectToAction("Farmacos");
         }
 
-        public ActionResult About()
+        public ActionResult Farmacos()
         {
-            ViewBag.Message = "Your application description page.";
 
-            return View();
+            return View(Storage.Instance.listaFarmacos);
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult Farmacos(string id, FormCollection collection)
         {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
+            int idFarmaco = Convert.ToInt32(id);
+            int cantidad = int.Parse(collection[("CantidadFarmaco_" + id)]);
+            Farmacos farmacoAgregado = new Farmacos
+            {
+                id = Storage.Instance.listaFarmacos[(idFarmaco - 1)].id,
+                nombreFarmaco = Storage.Instance.listaFarmacos[(idFarmaco - 1)].nombreFarmaco,
+                descripcionFarmaco = Storage.Instance.listaFarmacos[(idFarmaco - 1)].descripcionFarmaco,
+                casaProductora = Storage.Instance.listaFarmacos[(idFarmaco - 1)].casaProductora,
+                precio = Storage.Instance.listaFarmacos[(idFarmaco - 1)].precio,
+                existencia = Storage.Instance.listaFarmacos[(idFarmaco - 1)].existencia,
+            };
+
+            FarmacosPedidos farmacoPedido = new FarmacosPedidos
+            {
+                FarmacoPedido = farmacoAgregado,
+                cantidadSolicitada = cantidad
+            };
+
+            Storage.Instance.totalACancelar += farmacoPedido.calcularTotal();
+            Storage.Instance.pedidosFarmacos.Add(farmacoPedido);
+            return View(Storage.Instance.listaFarmacos);
         }
+
     }
 }

@@ -81,5 +81,26 @@ namespace ecommerceED1_2.Controllers
             return View(Storage.Instance.listaFarmacos);
         }
 
+        public ActionResult Pedidos()
+        {
+            return View(Storage.Instance.pedidosFarmacos);
+        }
+
+        [HttpPost]
+        public ActionResult Pedidos(FormCollection collection)
+        {
+
+            var pedido = new Pedidos
+            {
+                nombreCliente = collection["Nombre"],
+                direccion = collection["Direccion"],
+                nit = collection["Nit"],
+            };
+
+            pedido.descontarStock(Storage.Instance.listaFarmacos, Storage.Instance.pedidosFarmacos);
+            pedido.vaciarPedidos(Storage.Instance.pedidosFarmacos);
+            Storage.Instance.totalACancelar = 0;
+            return View(Storage.Instance.pedidosFarmacos);
+        }
     }
 }

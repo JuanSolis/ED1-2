@@ -137,6 +137,7 @@
     <Compile Include="Models\FarmacosPedidos.cs" />
     <Compile Include="Models\IPedidos.cs" />
     <Compile Include="Models\Nodo.cs" />
+    <Compile Include="Models\paginacionFarmacos.cs" />
     <Compile Include="Models\Pedidos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\reader.cs" />

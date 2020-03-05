@@ -48,14 +48,21 @@ namespace ecommerceED1_2.Controllers
             return RedirectToAction("Farmacos");
         }
 
-        public ActionResult Farmacos()
-        {
 
-            return View(Storage.Instance.listaFarmacos);
+
+        public ActionResult Farmacos(int page = 1)
+        {
+            var paginacionFarmacos = new paginacionFarmacos
+            {
+                BlogPerPage = 35,
+                farmacos = Storage.Instance.listaFarmacos,
+                CurrentPage = page
+            };
+            return View(paginacionFarmacos);
         }
 
         [HttpPost]
-        public ActionResult Farmacos(string id, FormCollection collection)
+        public ActionResult Farmacos(string id, FormCollection collection, int page)
         {
 
             int idFarmaco = Convert.ToInt32(id);
@@ -78,7 +85,14 @@ namespace ecommerceED1_2.Controllers
 
             Storage.Instance.totalACancelar += farmacoPedido.calcularTotal();
             Storage.Instance.pedidosFarmacos.Add(farmacoPedido);
-            return View(Storage.Instance.listaFarmacos);
+
+            var paginacionFarmacos = new paginacionFarmacos
+            {
+                BlogPerPage = 35,
+                farmacos = Storage.Instance.listaFarmacos,
+                CurrentPage = page
+            };
+            return View(paginacionFarmacos);
         }
 
         [HttpGet]
